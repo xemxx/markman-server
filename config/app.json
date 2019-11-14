@@ -1,0 +1,18 @@
+{
+    "run_mode": "develepment",
+    "app": {
+        "jwt_secret": "123"
+    },
+    "server": {
+        "http_port": 8000,
+        "read_timeout": 60,
+        "write_timeout": 60
+    },
+    "database": {
+        "type": "mysql",
+        "user": "root",
+        "password": "",
+        "host": "127.0.0.1:3306",
+        "database": "markman"
+    }
+}
