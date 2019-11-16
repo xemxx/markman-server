@@ -5,22 +5,23 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"markman-server/tools/auth"
 	"markman-server/tools/e"
+	"markman-server/tools/jwt"
 )
 
-//JWT ..
-func JWT() gin.HandlerFunc {
+//CheckToken ..
+func CheckToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
 		var data interface{}
 
 		code = e.SUCCESS
 		token := c.Query("token")
+		claims := jwt.Claims{}
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
-			claims, err := auth.ParseToken(token)
+			claims, err := jwt.ParseToken(token)
 			if err != nil {
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
 			} else if time.Now().Unix() > claims.ExpiresAt {
@@ -38,7 +39,8 @@ func JWT() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
+		c.Set("uid", claims.UID)
+		c.Set("username", claims.Username)
 		c.Next()
 	}
 }

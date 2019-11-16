@@ -1,4 +1,4 @@
-package auth
+package jwt
 
 import (
 	"markman-server/tools/config"
@@ -12,11 +12,13 @@ var jwtSecret = []byte(config.Cfg.GetString("app.jwt_secret"))
 //Claims .
 type Claims struct {
 	jwt.StandardClaims
-	Username string `json:"username"`
+	Username string      `json:"username"`
+	UID      int         `json:"id"`
+	_        interface{} //为了独立该工具封装做准备
 }
 
 //GenerateToken .
-func GenerateToken(username string) (string, error) {
+func GenerateToken(username string, uid int, d ...interface{}) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(365 * 24 * time.Hour)
 
@@ -26,6 +28,8 @@ func GenerateToken(username string) (string, error) {
 			Issuer:    "markman",
 		},
 		username,
+		uid,
+		d,
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
