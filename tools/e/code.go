@@ -15,4 +15,8 @@ const (
 	ERROR_AUTH_TOKEN               = 20003
 	ERROR_AUTH                     = 20004
 	ERROR_USER                     = 20005
+	ERROR_EXIST_USER_NAME          = 20006
+	ERROR_NOT_EXIST_USER_NAME      = 20007
+
+	ERROR_INSERT_FAILD = 30001
 )

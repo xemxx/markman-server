@@ -19,8 +19,9 @@ type Sign struct {
 }
 
 var validate *validator.Validate
+
 func init() {
-	validate=validator.New()
+	validate = validator.New()
 }
 
 // SignUp .
@@ -34,10 +35,13 @@ func SignUp(c *gin.Context) {
 
 	isExist := user.ExistUserByName(params.Username)
 	if isExist {
-		response.JSON(c, e.ERROR, "用户名已存在")
+		response.JSON(c, e.ERROR_EXIST_USER_NAME, e.GetMsg(e.ERROR_EXIST_USER_NAME))
 		return
 	}
-	user.AddUser(params.Username, params.Password)
+	if !user.AddUser(params.Username, params.Password) {
+		response.JSON(c, e.ERROR_INSERT_FAILD, e.GetMsg(e.ERROR_INSERT_FAILD))
+		return
+	}
 	response.JSON(c, e.SUCCESS, e.GetMsg(e.SUCCESS))
 }
 
@@ -52,24 +56,29 @@ func SignIn(c *gin.Context) {
 	code := e.SUCCESS
 	data := make(map[string]interface{})
 	uid, isExist := user.ExistUser(params.Username, params.Password)
-	if isExist {
-		token, err := jwt.GenerateToken(params.Username, uid)
-		if err != nil {
-			code = e.ERROR_AUTH_TOKEN
-		} else {
-			user.SaveToken(uid)
-			data["token"] = token
-			code = e.SUCCESS
-		}
-	} else {
+	if !isExist {
 		code = e.ERROR_USER
+		response.JSON(c, code, e.GetMsg(code), data)
+		return
 	}
+
+	// isExist=user.ExistToken()
+
+	token, err := jwt.GenerateToken(params.Username, uid)
+	if err != nil {
+		code = e.ERROR_AUTH_TOKEN
+		response.JSON(c, code, e.GetMsg(code), data)
+		return
+	}
+
+	_ = user.SaveToken(uid, token)
+	data["token"] = token
+	code = e.SUCCESS
 	response.JSON(c, code, e.GetMsg(code), data)
 }
 
 func validateSign(c *gin.Context) (Sign, error) {
 	params := Sign{}
-	//TODO:fix error: invalid character 'u' looking for beginning of value
 	if err := c.ShouldBind(&params); err != nil {
 		log.Println(err)
 		return Sign{}, err

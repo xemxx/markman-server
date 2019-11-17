@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"markman-server/tools/e"
 	"markman-server/tools/jwt"
+
+	"github.com/gin-gonic/gin"
 )
 
 //CheckToken ..
@@ -17,10 +18,11 @@ func CheckToken() gin.HandlerFunc {
 
 		code = e.SUCCESS
 		token := c.Query("token")
-		claims := jwt.Claims{}
+		var claims *jwt.Claims
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
+			// TODO: fix parseToken not return claims
 			claims, err := jwt.ParseToken(token)
 			if err != nil {
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
@@ -40,6 +42,7 @@ func CheckToken() gin.HandlerFunc {
 			return
 		}
 		c.Set("uid", claims.UID)
+		//log.Println("first:", claims)
 		c.Set("username", claims.Username)
 		c.Next()
 	}

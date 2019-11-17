@@ -1,6 +1,8 @@
 package user
 
 import (
+	"errors"
+	"log"
 	"markman-server/model"
 	"time"
 )
@@ -14,45 +16,65 @@ func ExistUser(username, password string) (int, bool) {
 		Password: password,
 	}
 	db.Where(user).First(&user)
-	if user.ID > 0 {
-		return user.ID, true
+	if user.ID == 0 || db.Error != nil {
+		return 0, false
 	}
-	return 0, false
+	return user.ID, true
 }
 
 // ExistUserByName .
 func ExistUserByName(username string) bool {
-	return !db.NewRecord(&model.User{Username: username})
-	// user := model.User{
-	// 	Username: username,
-	// }
-	// model.Db.Where(user).First(&user)
-	// fmt.Println(user)
-	// if user.ID > 0 {
-	// 	return true
-	// }
-	// return false
+	var user = model.User{Username: username}
+	db.Where(user).First(&user)
+	if user.ID == 0 || db.Error != nil {
+		return false
+	}
+	return true
 }
 
 // AddUser .
-func AddUser(username, password string) {
-	db.Create(&model.User{
+func AddUser(username, password string) bool {
+	user := model.User{
 		Username:   username,
 		Password:   password,
 		CreateTime: time.Now(),
-	})
+	}
+	if rows := db.Create(&user).RowsAffected; rows == 0 {
+		log.Println(db.Error)
+		return false
+	}
+	return true
 }
 
 // GetUserInfo .
-func GetUserInfo(uid int) model.User {
-	user := model.User{
+func GetUserInfo(uid int) (model.User, error) {
+	var user model.User
+	db.Select("username,create_time").Where(&model.User{
 		ID: uid,
+	}).First(&user)
+	if user.Username != "" {
+		return user, nil
 	}
-	db.Select("*").Where(user).First(&user)
-	return user
+	return model.User{}, errors.New("user not find")
 }
 
+// //ExistToken .
+// func ExistToken(uid int) (string, bool) {
+// 	var user model.User
+// 	db.Where("uid", uid).First(&user)
+// 	token := user.Token
+// 	if token != "" {
+// 		c:=jwt.PraseToken(token)
+// 		if c.
+// 	}
+// 	return token, true
+// }
+
 // SaveToken .
-func SaveToken(uid int) {
-	db.Save(&model.User{ID: uid})
+func SaveToken(uid int, token string) bool {
+
+	if rows := db.Model(&model.User{ID: uid}).Update("token", token).RowsAffected; rows == 0 {
+		return false
+	}
+	return true
 }

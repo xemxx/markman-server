@@ -20,7 +20,7 @@ type Claims struct {
 //GenerateToken .
 func GenerateToken(username string, uid int, d ...interface{}) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(365 * 24 * time.Hour)
+	expireTime := nowTime.Add(30 * 24 * time.Hour)
 
 	claims := Claims{
 		jwt.StandardClaims{
