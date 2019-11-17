@@ -20,12 +20,12 @@ func ExistUser(username, password string) (int, bool) {
 // ExistUserByName .
 func ExistUserByName(username string) bool {
 	return db.NewRecord(&model.User{Username: username})
-	// var user model.User
-	// model.Db.Where("username=?", username).First(&user)
-	// if user.ID > 0 {
-	// 	return true
-	// }
-	// return false
+	var user model.User
+	model.Db.Where("username=?", username).First(&user)
+	if user.ID > 0 {
+		return true
+	}
+	return false
 }
 
 // AddUser .

@@ -14,11 +14,14 @@ import (
 
 // Sign .
 type Sign struct {
-	Username string `json:"username" validate:"required,min=3,max=50"`
-	Password string `json:"password" validate:"required,min=3,max=50"`
+	Username string `form:"username" json:"username" validate:"required,min=3,max=50"`
+	Password string `form:"password" json:"password" validate:"required,min=3,max=50"`
 }
 
 var validate *validator.Validate
+func init() {
+	validate=validator.New()
+}
 
 // SignUp .
 func SignUp(c *gin.Context) {
@@ -65,9 +68,9 @@ func SignIn(c *gin.Context) {
 }
 
 func validateSign(c *gin.Context) (Sign, error) {
-	var params Sign
+	params := Sign{}
 	//TODO:fix error: invalid character 'u' looking for beginning of value
-	if err := c.ShouldBindJSON(&params); err != nil {
+	if err := c.ShouldBind(&params); err != nil {
 		log.Println(err)
 		return Sign{}, err
 	}
