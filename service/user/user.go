@@ -9,8 +9,11 @@ var db = model.Db
 
 //ExistUser .
 func ExistUser(username, password string) (int, bool) {
-	var user model.User
-	db.First(&user)
+	user := model.User{
+		Username: username,
+		Password: password,
+	}
+	db.Where(user).First(&user)
 	if user.ID > 0 {
 		return user.ID, true
 	}
@@ -19,13 +22,16 @@ func ExistUser(username, password string) (int, bool) {
 
 // ExistUserByName .
 func ExistUserByName(username string) bool {
-	return db.NewRecord(&model.User{Username: username})
-	var user model.User
-	model.Db.Where("username=?", username).First(&user)
-	if user.ID > 0 {
-		return true
-	}
-	return false
+	return !db.NewRecord(&model.User{Username: username})
+	// user := model.User{
+	// 	Username: username,
+	// }
+	// model.Db.Where(user).First(&user)
+	// fmt.Println(user)
+	// if user.ID > 0 {
+	// 	return true
+	// }
+	// return false
 }
 
 // AddUser .
