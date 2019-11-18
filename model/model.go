@@ -20,29 +20,23 @@ type Model struct {
 }
 
 func init() {
-
 	dbCfg := config.Cfg.GetStringMapString("database")
+	var err error
 
-	db, err := gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
+	Db, err = gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
 		dbCfg["user"],
 		dbCfg["password"],
 		dbCfg["host"],
 		dbCfg["database"],
 		"Asia%2FShanghai"))
-
 	if err != nil {
 		log.Println(err)
 	}
 
-	// gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-	// 	return tablePrefix + defaultTableName
-	// }
-
-	db.SingularTable(true)
-	db.LogMode(true)
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
-	Db = db
+	Db.SingularTable(true)
+	Db.LogMode(true)
+	Db.DB().SetMaxIdleConns(10)
+	Db.DB().SetMaxOpenConns(100)
 }
 
 //CloseDB .

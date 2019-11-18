@@ -22,8 +22,9 @@ func CheckToken() gin.HandlerFunc {
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
-			// TODO: fix parseToken not return claims
-			claims, err := jwt.ParseToken(token)
+			// fix variable is nil 必须先声明err,否则claims将被推断为局部变量
+			var err error
+			claims, err = jwt.ParseToken(token)
 			if err != nil {
 				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
 			} else if time.Now().Unix() > claims.ExpiresAt {
@@ -42,7 +43,6 @@ func CheckToken() gin.HandlerFunc {
 			return
 		}
 		c.Set("uid", claims.UID)
-		//log.Println("first:", claims)
 		c.Set("username", claims.Username)
 		c.Next()
 	}

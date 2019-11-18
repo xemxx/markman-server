@@ -11,12 +11,13 @@ import (
 // Info .
 func Info(c *gin.Context) {
 	uid := c.GetInt("uid")
-	// log.Println(uid)
 	u, err := user.GetUserInfo(uid)
 	if err != nil {
 		response.JSON(c, e.ERROR_NOT_EXIST_USER_NAME, e.GetMsg(e.ERROR_NOT_EXIST_USER_NAME))
 		return
 	}
-	// log.Println(u)
-	response.JSON(c, e.SUCCESS, e.GetMsg(e.SUCCESS), u)
+	response.JSON(c, e.SUCCESS, e.GetMsg(e.SUCCESS), map[string]string{
+		"username":    u.Username,
+		"create_time": u.CreateTime.Format("2006-01-02 15:04:05"),
+	})
 }
