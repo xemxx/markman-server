@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"markman-server/model"
+	"markman-server/tools/common"
 	"time"
 )
 
@@ -13,10 +14,9 @@ var db = model.Db
 func ExistUser(username, password string) (int, bool) {
 	user := model.User{
 		Username: username,
-		Password: password,
 	}
 	db.Where(user).First(&user)
-	if user.ID == 0 || db.Error != nil {
+	if user.ID == 0 || db.Error != nil || !common.CheckPassword(user.Password, password) {
 		return 0, false
 	}
 	return user.ID, true
@@ -34,9 +34,14 @@ func ExistUserByName(username string) bool {
 
 // AddUser .
 func AddUser(username, password string) bool {
+	hash, err := common.NewPassword(password)
+	if err != nil {
+		log.Println("generate password faild: err: ", err)
+		return false
+	}
 	user := model.User{
 		Username:   username,
-		Password:   password,
+		Password:   hash,
 		CreateTime: time.Now(),
 	}
 	if rows := db.Create(&user).RowsAffected; rows == 0 {
