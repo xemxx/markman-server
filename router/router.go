@@ -5,6 +5,7 @@ import (
 
 	"markman-server/api/user"
 	"markman-server/middleware/auth"
+	"markman-server/middleware/cors"
 	"markman-server/tools/config"
 )
 
@@ -16,6 +17,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
+	r.Use(cors.CorsMiddleware())
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
