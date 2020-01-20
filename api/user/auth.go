@@ -2,9 +2,9 @@ package user
 
 import (
 	"github.com/go-playground/validator/v10"
-	"log"
 	"markman-server/service/user"
 	"markman-server/tools/common"
+	"markman-server/tools/logs"
 	"markman-server/tools/response"
 
 	"github.com/gin-gonic/gin"
@@ -76,7 +76,7 @@ func SignIn(c *gin.Context) {
 func validateSign(c *gin.Context) (Sign, error) {
 	params := Sign{}
 	if err := c.ShouldBind(&params); err != nil {
-		log.Println(err)
+		logs.Log(err.Error())
 		return Sign{}, err
 	}
 	if err := validate.Struct(params); err != nil {

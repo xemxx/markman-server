@@ -2,7 +2,8 @@ package user
 
 import (
 	"errors"
-	"log"
+	"markman-server/tools/logs"
+
 	"markman-server/model"
 	"markman-server/tools/common"
 	"time"
@@ -36,7 +37,7 @@ func ExistUserByName(username string) bool {
 func AddUser(username, password string) bool {
 	hash, err := common.NewPassword(password)
 	if err != nil {
-		log.Println("generate password faild: err: ", err)
+		logs.Log("generate password failed: err: "+ err.Error())
 		return false
 	}
 	user := model.User{
@@ -45,7 +46,7 @@ func AddUser(username, password string) bool {
 		CreateTime: time.Now(),
 	}
 	if rows := db.Create(&user).RowsAffected; rows == 0 {
-		log.Println(db.Error)
+		logs.Log(db.Error.Error())
 		return false
 	}
 	return true

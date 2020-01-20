@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"markman-server/tools/common"
 	"net/http"
 	"time"
@@ -30,7 +29,7 @@ func (c *Auth) CheckToken() gin.HandlerFunc {
 			var err error
 			claims, err = common.ParseToken(token)
 			if err != nil {
-				log.Println("token鉴权失败：",err)
+				//logs.Log("token鉴权失败：",err)
 				code = response.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = response.ErrorAuthCheckTokenTimeout

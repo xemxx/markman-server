@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"log"
 	"markman-server/tools/config"
+	"markman-server/tools/logs"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -28,9 +28,9 @@ func init() {
 		dbCfg["database"],
 		"Asia%2FShanghai"))
 	if err != nil {
-		log.Println(err)
+		logs.Log(err.Error())
+		return
 	}
-
 	Db.SingularTable(true)
 	Db.LogMode(true)
 	Db.DB().SetMaxIdleConns(10)
