@@ -1,13 +1,11 @@
 package user
 
 import (
+	"github.com/go-playground/validator/v10"
 	"log"
 	"markman-server/service/user"
-	"markman-server/tools/e"
-	"markman-server/tools/jwt"
+	"markman-server/tools/common"
 	"markman-server/tools/response"
-
-	"github.com/go-playground/validator/v10"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,59 +22,57 @@ func init() {
 	validate = validator.New()
 }
 
-// SignUp .
+// SignUp 注册流程，生成新token并供使用
 func SignUp(c *gin.Context) {
-
 	params, err := validateSign(c)
 	if err != nil {
-		response.JSON(c, e.INVALID_PARAMS, e.GetMsg(e.INVALID_PARAMS))
+		response.JSON(c, response.InvalidParams, response.GetMsg(response.InvalidParams))
 		return
 	}
 
 	isExist := user.ExistUserByName(params.Username)
 	if isExist {
-		response.JSON(c, e.ERROR_EXIST_USER_NAME, e.GetMsg(e.ERROR_EXIST_USER_NAME))
+		response.JSON(c, response.ErrorExistUserName, response.GetMsg(response.ErrorExistUserName))
 		return
 	}
 	if !user.AddUser(params.Username, params.Password) {
-		response.JSON(c, e.ERROR_INSERT_FAILD, e.GetMsg(e.ERROR_INSERT_FAILD))
+		response.JSON(c, response.ErrorInsertFailed, response.GetMsg(response.ErrorInsertFailed))
 		return
 	}
-	response.JSON(c, e.SUCCESS, e.GetMsg(e.SUCCESS))
+	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS))
 }
 
-// SignIn .
+// SignIn 登录流程，生成新token并供使用
 func SignIn(c *gin.Context) {
 	params, err := validateSign(c.Copy())
 	if err != nil {
-		response.JSON(c, e.INVALID_PARAMS, e.GetMsg(e.INVALID_PARAMS))
+		response.JSON(c, response.InvalidParams, response.GetMsg(response.InvalidParams))
 		return
 	}
 
-	code := e.SUCCESS
+	code := response.SUCCESS
 	data := make(map[string]interface{})
 	uid, isExist := user.ExistUser(params.Username, params.Password)
 	if !isExist {
-		code = e.ERROR_USER
-		response.JSON(c, code, e.GetMsg(code), data)
+		code = response.ErrorUser
+		response.JSON(c, code, response.GetMsg(code), data)
 		return
 	}
 
-	// isExist=user.ExistToken()
-
-	token, err := jwt.GenerateToken(params.Username, uid)
+	token, err := common.GenerateToken(params.Username, uid)
 	if err != nil {
-		code = e.ERROR_AUTH_TOKEN
-		response.JSON(c, code, e.GetMsg(code), data)
+		code = response.ErrorAuthToken
+		response.JSON(c, code, response.GetMsg(code), data)
 		return
 	}
 
 	_ = user.SaveToken(uid, token)
 	data["token"] = token
-	code = e.SUCCESS
-	response.JSON(c, code, e.GetMsg(code), data)
+	code = response.SUCCESS
+	response.JSON(c, code, response.GetMsg(code), data)
 }
 
+// 验证登录时和注册提交的参数是否合法
 func validateSign(c *gin.Context) (Sign, error) {
 	params := Sign{}
 	if err := c.ShouldBind(&params); err != nil {
@@ -84,11 +80,6 @@ func validateSign(c *gin.Context) (Sign, error) {
 		return Sign{}, err
 	}
 	if err := validate.Struct(params); err != nil {
-		// defer func(err error) {
-		// 	for _, err := range err.(validator.ValidationErrors) {
-		// 		fmt.Printf("Validate faild: Value %v  and Field %v \n", err.Value(), err.Field())
-		// 	}
-		// }(err)
 		return Sign{}, err
 	}
 

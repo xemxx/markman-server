@@ -14,5 +14,8 @@
         "password": "123456",
         "host": "127.0.0.1:3306",
         "database": "markman"
+    },
+    "runtime": {
+     "log_url": "runtime/log/"
     }
 }

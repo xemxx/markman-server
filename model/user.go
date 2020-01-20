@@ -13,16 +13,6 @@ type User struct {
 	CreateTime time.Time `json:"create_time"`
 }
 
-// //CheckUser .
-// func CheckUser(username, password string) (int, bool) {
-// 	var user User
-// 	db.Select("id").Where(User{Username: username, Password: password}).First(&user)
-// 	if user.ID > 0 {
-// 		return user.ID, true
-// 	}
-// 	return 0, false
-// }
-
 // GetByID .
 func (u *User) GetByID() {
 	Db.Where(u).First(u)

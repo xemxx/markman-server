@@ -22,5 +22,4 @@ func JSON(c *gin.Context, err int, msg string, data ...interface{}) {
 		"msg":  msg,
 		"data": responseData,
 	})
-
 }

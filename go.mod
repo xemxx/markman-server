@@ -7,7 +7,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0
-	github.com/go-playground/validator v9.30.0+incompatible
 	github.com/go-playground/validator/v10 v10.0.0
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/jinzhu/gorm v1.9.11
@@ -31,5 +30,4 @@ require (
 // 	github.com/xemxx/markman-server/middleware => ./middleware
 // 	github.com/xemxx/markman-server/models => ./models
 // 	github.com/xemxx/markman-server/routers => ./routers
-
 // )

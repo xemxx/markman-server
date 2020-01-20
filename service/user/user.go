@@ -63,21 +63,8 @@ func GetUserInfo(uid int) (model.User, error) {
 	return model.User{}, errors.New("user not find")
 }
 
-// //ExistToken .
-// func ExistToken(uid int) (string, bool) {
-// 	var user model.User
-// 	db.Where("uid", uid).First(&user)
-// 	token := user.Token
-// 	if token != "" {
-// 		c:=jwt.PraseToken(token)
-// 		if c.
-// 	}
-// 	return token, true
-// }
-
 // SaveToken .
 func SaveToken(uid int, token string) bool {
-
 	if rows := db.Model(&model.User{ID: uid}).Update("token", token).RowsAffected; rows == 0 {
 		return false
 	}

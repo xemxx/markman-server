@@ -1,4 +1,4 @@
-package cors
+package middleware
 
 import (
 	"net/http"
@@ -6,8 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CorsMiddleware .
-func CorsMiddleware() gin.HandlerFunc {
+type Cors struct {
+
+}
+
+// CorsMiddleware 用于跨域请求
+func (c *Cors) CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		//origin := c.Request.Header.Get("Origin")
@@ -23,7 +27,7 @@ func CorsMiddleware() gin.HandlerFunc {
 		if true {
 			// 核心处理方式
 			c.Header("Access-Control-Allow-Origin", "*")
-			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
 			c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
 			c.Header("Access-Control-Allow-Credentials", "true")
 			//c.Set("content-type", "application/json")

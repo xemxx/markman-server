@@ -1,3 +1,5 @@
 .vscode
-config/*
-!config/app.json.bac
+app.json
+
+out
+runtime
