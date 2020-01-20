@@ -1,5 +1,7 @@
 .vscode
-app.json
+.idea
 
 out
 runtime
+
+app.json
