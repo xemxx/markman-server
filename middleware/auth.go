@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"markman-server/tools/response"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Auth struct {
-
 }
 
 //CheckToken ..
@@ -23,7 +23,7 @@ func (c *Auth) CheckToken() gin.HandlerFunc {
 		token := c.Request.Header.Get("Authorization")
 		var claims *common.Claims
 		if token == "" {
-			code = response.ErrorAuth
+			code = response.ErrorAuthToken
 		} else {
 			// fix variable is nil 必须先声明err,否则claims将被推断为局部变量
 			var err error
@@ -46,7 +46,7 @@ func (c *Auth) CheckToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set("token",token)
+		c.Set("token", token)
 		c.Set("uid", claims.UID)
 		c.Set("username", claims.Username)
 		c.Next()

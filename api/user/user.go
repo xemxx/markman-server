@@ -1,10 +1,11 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
 	"markman-server/service/user"
 	"markman-server/tools/common"
 	"markman-server/tools/response"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Info .

@@ -1,11 +1,12 @@
 package user
 
 import (
-	"github.com/go-playground/validator/v10"
 	"markman-server/service/user"
 	"markman-server/tools/common"
 	"markman-server/tools/logs"
 	"markman-server/tools/response"
+
+	"github.com/go-playground/validator/v10"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,7 +62,7 @@ func SignIn(c *gin.Context) {
 
 	token, err := common.GenerateToken(params.Username, uid)
 	if err != nil {
-		code = response.ErrorAuthToken
+		code = response.ERROR
 		response.JSON(c, code, response.GetMsg(code), data)
 		return
 	}

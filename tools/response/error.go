@@ -1,7 +1,6 @@
 package response
 
 const (
-	//SUCCESS .
 	SUCCESS       = 200
 	ERROR         = 500
 	InvalidParams = 400
@@ -13,7 +12,6 @@ const (
 	ErrorAuthCheckTokenFail    = 20001
 	ErrorAuthCheckTokenTimeout = 20002
 	ErrorAuthToken             = 20003
-	ErrorAuth                  = 20004
 	ErrorUser                  = 20005
 	ErrorExistUserName         = 20006
 	ErrorNotExistUserName      = 20007
@@ -22,8 +20,8 @@ const (
 )
 
 var MsgFlags = map[int]string{
-	SUCCESS:       "ok",
-	ERROR:         "fail",
+	SUCCESS:       "处理成功",
+	ERROR:         "服务器错误",
 	InvalidParams: "请求参数错误",
 
 	//ERROR_EXIST_TAG:                "已存在该标签名称",
@@ -32,8 +30,7 @@ var MsgFlags = map[int]string{
 
 	ErrorAuthCheckTokenFail:    "Token无效",
 	ErrorAuthCheckTokenTimeout: "Token已超时",
-	ErrorAuthToken:             "Token生成失败",
-	ErrorAuth:                  "Token参数错误",
+	ErrorAuthToken:             "Token参数错误",
 	ErrorUser:                  "账号或者密码错误",
 	ErrorExistUserName:         "用户名已存在",
 	ErrorNotExistUserName:      "用户名不存在",
