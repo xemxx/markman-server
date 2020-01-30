@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"markman-server/tools/config"
 	"markman-server/tools/logs"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -12,16 +13,10 @@ import (
 // Db .
 var Db *gorm.DB
 
-//Model .
-type Model struct {
-	ID         int `gorm:"primary_key" json:"id"`
-	CreatedOn  int `json:"created_on"`
-	ModifiedOn int `json:"modified_on"`
-}
-
 func init() {
 	dbCfg := config.Cfg.GetStringMapString("database")
-	Db, err := gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
+	var err error
+	Db, err = gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
 		dbCfg["user"],
 		dbCfg["password"],
 		dbCfg["host"],
@@ -35,6 +30,7 @@ func init() {
 	Db.LogMode(true)
 	Db.DB().SetMaxIdleConns(10)
 	Db.DB().SetMaxOpenConns(100)
+	Db.DB().SetConnMaxLifetime(time.Hour)
 }
 
 //CloseDB .

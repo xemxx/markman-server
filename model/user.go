@@ -10,6 +10,7 @@ type User struct {
 	Username   string    `gorm:"unique;not null" json:"username"`
 	Password   string    `json:"password"`
 	Token      string    `json:"token"`
+	SC         int     `json:"SC"`
 	CreateTime time.Time `json:"create_time"`
 }
 

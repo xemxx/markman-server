@@ -20,7 +20,7 @@ const (
 )
 
 var MsgFlags = map[int]string{
-	SUCCESS:       "处理成功",
+	SUCCESS:       "ok",
 	ERROR:         "服务器错误",
 	InvalidParams: "请求参数错误",
 

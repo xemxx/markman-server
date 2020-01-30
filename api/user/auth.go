@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"markman-server/service/user"
 	"markman-server/tools/common"
 	"markman-server/tools/logs"
@@ -53,6 +54,7 @@ func SignIn(c *gin.Context) {
 
 	code := response.SUCCESS
 	data := make(map[string]interface{})
+	logs.Log(fmt.Sprintln(params))
 	uid, isExist := user.ExistUser(params.Username, params.Password)
 	if !isExist {
 		code = response.ErrorUser
@@ -76,7 +78,7 @@ func SignIn(c *gin.Context) {
 // 验证登录时和注册提交的参数是否合法
 func validateSign(c *gin.Context) (Sign, error) {
 	params := Sign{}
-	if err := c.ShouldBind(&params); err != nil {
+	if err := c.ShouldBindJSON(&params); err != nil {
 		logs.Log(err.Error())
 		return Sign{}, err
 	}

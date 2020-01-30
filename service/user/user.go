@@ -16,7 +16,7 @@ func ExistUser(username, password string) (int, bool) {
 	user := model.User{
 		Username: username,
 	}
-	db.Where(user).First(&user)
+	db.Where(&user).First(&user)
 	if user.ID == 0 || db.Error != nil || !common.CheckPassword(user.Password, password) {
 		return 0, false
 	}
@@ -26,7 +26,7 @@ func ExistUser(username, password string) (int, bool) {
 // ExistUserByName .
 func ExistUserByName(username string) bool {
 	var user = model.User{Username: username}
-	db.Where(user).First(&user)
+	db.Where(&user).First(&user)
 	if user.ID == 0 || db.Error != nil {
 		return false
 	}
@@ -37,13 +37,14 @@ func ExistUserByName(username string) bool {
 func AddUser(username, password string) bool {
 	hash, err := common.NewPassword(password)
 	if err != nil {
-		logs.Log("generate password failed: err: "+ err.Error())
+		logs.Log("generate password failed: err: " + err.Error())
 		return false
 	}
 	user := model.User{
 		Username:   username,
 		Password:   hash,
 		CreateTime: time.Now(),
+		SC:         0,
 	}
 	if rows := db.Create(&user).RowsAffected; rows == 0 {
 		logs.Log(db.Error.Error())
@@ -54,10 +55,8 @@ func AddUser(username, password string) bool {
 
 // GetUserInfo .
 func GetUserInfo(uid int) (model.User, error) {
-	var user model.User
-	db.Select("username,create_time").Where(&model.User{
-		ID: uid,
-	}).First(&user)
+	var user = model.User{ID: uid}
+	user.GetByID()
 	if user.Username != "" {
 		return user, nil
 	}
@@ -70,4 +69,13 @@ func SaveToken(uid int, token string) bool {
 		return false
 	}
 	return true
+}
+
+func GetLastSC(uid int) (int, error) {
+	var user = model.User{ID: uid}
+	user.GetByID()
+	if user.SC > -1 {
+		return user.SC, nil
+	}
+	return 0, errors.New("user not find")
 }

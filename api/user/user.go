@@ -40,3 +40,17 @@ func FlashToken(c *gin.Context) {
 	}
 	response.JSON(c, code, response.GetMsg(code), data)
 }
+
+// 获取最新同步标志
+func GetLastSyncCount(c *gin.Context) {
+	code, data := response.SUCCESS, make(map[string]interface{})
+	uid := c.GetInt("uid")
+
+	SC, err := user.GetLastSC(uid)
+	if err != nil {
+		code = response.ERROR
+	} else {
+		data["lastSC"] = SC
+	}
+	response.JSON(c, code, response.GetMsg(code), data)
+}
