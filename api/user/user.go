@@ -8,19 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Info .
-func Info(c *gin.Context) {
-	uid := c.GetInt("uid")
-	u, err := user.GetUserInfo(uid)
-	if err != nil {
-		response.JSON(c, response.ErrorNotExistUserName, response.GetMsg(response.ErrorNotExistUserName))
-		return
-	}
-	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS), map[string]string{
-		"username":    u.Username,
-		"create_time": u.CreateTime.Format("2006-01-02 15:04:05"),
-	})
-}
+//// Info .
+//func Info(c *gin.Context) {
+//	uid := c.GetInt("uid")
+//	u, err := user.GetUserInfo(uid)
+//	if err != nil {
+//		response.JSON(c, response.ErrorNotExistUserName, response.GetMsg(response.ErrorNotExistUserName))
+//		return
+//	}
+//	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS), map[string]string{
+//		"username":    u.Username,
+//		"create_time": u.CreateTime.Format("2006-01-02 15:04:05"),
+//	})
+//}
 
 // FlashToken 每次登录新发放新token
 func FlashToken(c *gin.Context) {

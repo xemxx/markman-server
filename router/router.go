@@ -38,7 +38,7 @@ func InitRouter() *gin.Engine {
 	mAuth := middleware.Auth{}
 	ur.Use(mAuth.CheckToken())
 	{
-		ur.POST("/info", user.Info)
+		//ur.POST("/info", user.Info)
 		ur.POST("/flashToken", user.FlashToken)
 		ur.GET("/getLastSyncCount", user.GetLastSyncCount)
 	}
@@ -48,6 +48,10 @@ func InitRouter() *gin.Engine {
 	nbr.Use(mAuth.CheckToken())
 	{
 		nbr.GET("/getSync",notebook.GetSync)
+		nbr.POST("/create",notebook.Create)
+		nbr.POST("/delete",notebook.Delete)
+		nbr.POST("/update",notebook.Update)
+
 	}
 
 	// note

@@ -53,15 +53,25 @@ func AddUser(username, password string) bool {
 	return true
 }
 
-// GetUserInfo .
-func GetUserInfo(uid int) (model.User, error) {
-	var user = model.User{ID: uid}
-	user.GetByID()
-	if user.Username != "" {
-		return user, nil
-	}
-	return model.User{}, errors.New("user not find")
+func UpdateSC(id,SC int){
+	db.Table("user").Where("id=?",[]int{id}).Update(map[string]interface{}{"SC":SC})
 }
+
+func Get(id int) model.User{
+	var user model.User
+	db.Where(`id=?`,[]int{id}).First(&user)
+	return user
+}
+
+//// GetUserInfo .
+//func GetUserInfo(uid int) (model.User, error) {
+//	var user = model.User{ID: uid}
+//	user.GetByID()
+//	if user.Username != "" {
+//		return user, nil
+//	}
+//	return model.User{}, errors.New("user not find")
+//}
 
 // SaveToken .
 func SaveToken(uid int, token string) bool {
