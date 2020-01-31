@@ -1,10 +1,10 @@
-package notebook
+package note
 
 import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"markman-server/model"
-	"markman-server/service/notebook"
+	"markman-server/service/note"
 	"markman-server/service/user"
 	"markman-server/tools/response"
 	"strconv"
@@ -15,9 +15,9 @@ type Client struct {
 	ID          int    `json:"id"`
 	Guid        string `json:"guid"`
 	Uid         int    `json:"uid"`
-	Name        string `json:"name"`
-	Sort        int    `json:"sort"`
-	SortType    int    `json:"sortType"`
+	Bid         string `json:"bid"`
+	Title       string `json:"title"`
+	Content     string `json:"content"`
 	ModifyState int    `json:"modifyState"`
 	SC          int    `json:"SC"`
 	AddDate     int64  `json:"addDate"`
@@ -30,12 +30,12 @@ func GetSync(c *gin.Context) {
 	uid := c.GetInt("uid")
 
 	code, data := response.SUCCESS, make(map[string]interface{})
-	notebooks, err := notebook.GetSync(uid, afterSC, maxCount)
+	notes, err := note.GetSync(uid, afterSC, maxCount)
 	if err != nil {
 		log.Println(err)
 		code = response.ERROR
 	} else {
-		data["notebooks"] = notebooks
+		data["notes"] = notes
 	}
 	response.JSON(c, code, response.GetMsg(code), data)
 }
@@ -53,21 +53,21 @@ func Create(c *gin.Context) {
 	u := user.Get(uid)
 
 	code, data := response.SUCCESS, resultErr{}
-	
-	id := notebook.Exist(client.Guid)
+
+	id := note.Exist(client.Guid)
 	if id == 0 {
-		newNotebook := model.Notebook{
+		newNote := model.Note{
 			Guid:       client.Guid,
-			Uid:        c.GetInt("uid"),
-			Name:       client.Name,
-			Sort:       client.Sort,
-			SortType:   client.SortType,
+			Uid:        uid,
+			Bid:        client.Bid,
+			Title:      client.Title,
+			Content:    client.Content,
 			SC:         u.SC + 1,
 			AddDate:    time.Unix(client.AddDate, 0),
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      0,
 		}
-		notebook.Add(newNotebook)
+		note.Add(newNote)
 		user.UpdateSC(uid, u.SC+1)
 		data = resultErr{false, false, u.SC + 1}
 	} else {
@@ -84,23 +84,22 @@ func Delete(c *gin.Context) {
 
 	code, data := response.SUCCESS, resultErr{}
 
-	local:=notebook.Get(client.Guid)
-	if local.SC==client.SC{
-		newNotebook := model.Notebook{
-			Uid:        c.GetInt("uid"),
-			Name:       client.Name,
-			Sort:       client.Sort,
-			SortType:   client.SortType,
+	local := note.Get(client.Guid)
+	if local.SC == client.SC {
+		newNote := model.Note{
+			Bid:        client.Bid,
+			Title:      client.Title,
+			Content:    client.Content,
 			SC:         u.SC + 1,
 			AddDate:    time.Unix(client.AddDate, 0),
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      1,
 		}
-		notebook.Update(newNotebook)
+		note.Update(newNote)
 		user.UpdateSC(uid, u.SC+1)
 		data = resultErr{false, false, u.SC + 1}
-	}else{
-		data=resultErr{
+	} else {
+		data = resultErr{
 			IsRepeat: false,
 			IsErr:    true,
 			SC:       u.SC,
@@ -116,22 +115,21 @@ func Update(c *gin.Context) {
 
 	code, data := response.SUCCESS, resultErr{}
 
-	local:=notebook.Get(client.Guid)
-	if local.SC==client.SC{
-		newNotebook := model.Notebook{
-			Uid:        c.GetInt("uid"),
-			Name:       client.Name,
-			Sort:       client.Sort,
-			SortType:   client.SortType,
+	local := note.Get(client.Guid)
+	if local.SC == client.SC {
+		newNote := model.Note{
+			Bid:        client.Bid,
+			Title:      client.Title,
+			Content:    client.Content,
 			SC:         u.SC + 1,
 			AddDate:    time.Unix(client.AddDate, 0),
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 		}
-		notebook.Update(newNotebook)
+		note.Update(newNote)
 		user.UpdateSC(uid, u.SC+1)
 		data = resultErr{false, false, u.SC + 1}
-	}else{
-		data=resultErr{
+	} else {
+		data = resultErr{
 			IsRepeat: false,
 			IsErr:    true,
 			SC:       u.SC,

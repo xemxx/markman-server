@@ -11,7 +11,7 @@ type config struct {
 
 var Cfg *config
 
-func init(){
+func init() {
 	Cfg = &config{
 		viper.New(),
 	}

@@ -8,7 +8,7 @@ var db = model.Db
 
 func GetSync(uid, afterSC, count int) ([]model.Notebook, error) {
 	var all []model.Notebook
-	err := db.Where("uid = ? AND SC > ?", []int{uid, afterSC}).Order("SC aes").Limit(count).Scan(&all).Error
+	err := db.Where("uid = ? AND SC > ?", []int{uid, afterSC}).Order("SC aes").Limit(count).Find(&all).Error
 	if err != nil {
 		return []model.Notebook{}, err
 	}
@@ -26,16 +26,16 @@ func Exist(guid string) int {
 	return notebook.ID
 }
 
-func Add(n model.Notebook){
-	n.Add()
+func Add(n model.Notebook) {
+	db.Create(n)
 }
 
-func Get(guid string)model.Notebook{
+func Get(guid string) model.Notebook {
 	var notebook model.Notebook
-	db.Where("guid = ?",[]string{guid}).First(&notebook)
+	db.Where("guid = ?", []string{guid}).First(&notebook)
 	return notebook
 }
 
-func Update(notebook model.Notebook){
-	db.Model(model.Notebook{}).Where("guid=?",[]string{notebook.Guid}).Update(notebook)
+func Update(notebook model.Notebook) {
+	db.Model(model.Notebook{}).Where("guid=?", []string{notebook.Guid}).Update(notebook)
 }

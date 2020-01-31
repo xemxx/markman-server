@@ -53,13 +53,13 @@ func AddUser(username, password string) bool {
 	return true
 }
 
-func UpdateSC(id,SC int){
-	db.Table("user").Where("id=?",[]int{id}).Update(map[string]interface{}{"SC":SC})
+func UpdateSC(id, SC int) {
+	db.Table("user").Where("id=?", []int{id}).Update(map[string]interface{}{"SC": SC})
 }
 
-func Get(id int) model.User{
+func Get(id int) model.User {
 	var user model.User
-	db.Where(`id=?`,[]int{id}).First(&user)
+	db.Where(`id=?`, []int{id}).First(&user)
 	return user
 }
 

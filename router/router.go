@@ -47,10 +47,10 @@ func InitRouter() *gin.Engine {
 	nbr := r.Group("/notebook")
 	nbr.Use(mAuth.CheckToken())
 	{
-		nbr.GET("/getSync",notebook.GetSync)
-		nbr.POST("/create",notebook.Create)
-		nbr.POST("/delete",notebook.Delete)
-		nbr.POST("/update",notebook.Update)
+		nbr.GET("/getSync", notebook.GetSync)
+		nbr.POST("/create", notebook.Create)
+		nbr.POST("/delete", notebook.Delete)
+		nbr.POST("/update", notebook.Update)
 
 	}
 
@@ -58,7 +58,10 @@ func InitRouter() *gin.Engine {
 	nr := r.Group("/note")
 	nr.Use(mAuth.CheckToken())
 	{
-		nr.GET("/getSync",note.GetSync)
+		nr.GET("/getSync", note.GetSync)
+		nr.POST("/create", note.Create)
+		nr.POST("/delete", note.Delete)
+		nr.POST("/update", note.Update)
 	}
 
 	return r

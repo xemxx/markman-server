@@ -2,6 +2,6 @@ package logs
 
 import "log"
 
-func Log(s string){
+func Log(s string) {
 	log.Println(s)
 }

@@ -14,7 +14,3 @@ type Notebook struct {
 	ModifyDate time.Time `json:"modifyDate"`
 	IsDel      int       `json:"isDel"`
 }
-
-func (n *Notebook)Add(){
-	Db.Create(n)
-}

@@ -7,7 +7,6 @@ import (
 )
 
 type Cors struct {
-
 }
 
 // CorsMiddleware 用于跨域请求

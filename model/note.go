@@ -6,7 +6,7 @@ type Note struct {
 	ID         int       `json:"id"`
 	Guid       string    `json:"guid"`
 	Uid        int       `json:"uid"`
-	Bid        int       `json:"bid"`
+	Bid        string    `json:"bid"`
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`
 	SC         int       `json:"SC"`

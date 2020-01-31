@@ -16,11 +16,11 @@ func main() {
 	r := router.InitRouter()
 	cfg := config.Cfg
 	// 记录到文件。
-	f, err := os.Create(cfg.GetString("runtime.log_url")+"gin.log")
-	if err!=nil{
+	f, err := os.Create(cfg.GetString("runtime.log_url") + "gin.log")
+	if err != nil {
 		logs.Log(err.Error())
 	}
-	gin.DefaultWriter = io.MultiWriter(f,os.Stdout)
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 
 	s := &http.Server{
 		Addr:           ":" + cfg.GetString("server.http_port"),
@@ -32,6 +32,6 @@ func main() {
 
 	err = s.ListenAndServe()
 	if err != nil {
-		logs.Log("启动失败，error："+err.Error())
+		logs.Log("启动失败，error：" + err.Error())
 	}
 }
