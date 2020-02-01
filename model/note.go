@@ -9,8 +9,8 @@ type Note struct {
 	Bid        string    `json:"bid"`
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`
-	SC         int       `json:"SC"`
-	AddDate    time.Time `json:"addDate"`
-	ModifyDate time.Time `json:"modifyDate"`
-	IsDel      int       `json:"isDel"`
+	SC         int       `gorm:"column:SC" json:"SC"`
+	AddDate    time.Time `gorm:"column:addDate" json:"addDate"`
+	ModifyDate time.Time `gorm:"column:modifyDate" json:"modifyDate"`
+	IsDel      int       `gorm:"column:isDel" json:"isDel"`
 }

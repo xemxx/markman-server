@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"markman-server/tools/common"
 	"net/http"
 	"time"
@@ -21,6 +22,7 @@ func (c *Auth) CheckToken() gin.HandlerFunc {
 
 		code = response.SUCCESS
 		token := c.Request.Header.Get("Authorization")
+		log.Println(token)
 		var claims *common.Claims
 		if token == "" {
 			code = response.ErrorAuthToken

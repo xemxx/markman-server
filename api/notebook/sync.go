@@ -67,9 +67,14 @@ func Create(c *gin.Context) {
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      0,
 		}
-		notebook.Add(newNotebook)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
+		err := notebook.Add(newNotebook)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+
+			data = resultErr{false, false, u.SC + 1}
+		}
 	} else {
 		data = resultErr{true, false, u.SC}
 	}
@@ -96,10 +101,14 @@ func Delete(c *gin.Context) {
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      1,
 		}
-		notebook.Update(newNotebook)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
-	} else {
+		err := notebook.Update(newNotebook)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+			data = resultErr{false, false, u.SC + 1}
+		}
+	}  else {
 		data = resultErr{
 			IsRepeat: false,
 			IsErr:    true,
@@ -127,9 +136,13 @@ func Update(c *gin.Context) {
 			AddDate:    time.Unix(client.AddDate, 0),
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 		}
-		notebook.Update(newNotebook)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
+		err := notebook.Update(newNotebook)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+			data = resultErr{false, false, u.SC + 1}
+		}
 	} else {
 		data = resultErr{
 			IsRepeat: false,

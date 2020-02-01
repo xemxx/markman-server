@@ -67,9 +67,13 @@ func Create(c *gin.Context) {
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      0,
 		}
-		note.Add(newNote)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
+		err := note.Add(newNote)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+			data = resultErr{false, false, u.SC + 1}
+		}
 	} else {
 		data = resultErr{true, false, u.SC}
 	}
@@ -95,9 +99,13 @@ func Delete(c *gin.Context) {
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 			IsDel:      1,
 		}
-		note.Update(newNote)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
+		err := note.Update(newNote)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+			data = resultErr{false, false, u.SC + 1}
+		}
 	} else {
 		data = resultErr{
 			IsRepeat: false,
@@ -125,9 +133,13 @@ func Update(c *gin.Context) {
 			AddDate:    time.Unix(client.AddDate, 0),
 			ModifyDate: time.Unix(client.ModifyDate, 0),
 		}
-		note.Update(newNote)
-		user.UpdateSC(uid, u.SC+1)
-		data = resultErr{false, false, u.SC + 1}
+		err := note.Update(newNote)
+		if err != nil {
+			data = resultErr{false, true, u.SC + 1}
+		} else {
+			user.UpdateSC(uid, u.SC+1)
+			data = resultErr{false, false, u.SC + 1}
+		}
 	} else {
 		data = resultErr{
 			IsRepeat: false,

@@ -8,9 +8,9 @@ type Notebook struct {
 	Uid        int       `json:"uid"`
 	Name       string    `json:"name"`
 	Sort       int       `json:"sort"`
-	SortType   int       `json:"sortType"`
-	SC         int       `json:"SC"`
-	AddDate    time.Time `json:"addDate"`
-	ModifyDate time.Time `json:"modifyDate"`
-	IsDel      int       `json:"isDel"`
+	SortType   int       `gorm:"column:sortType" json:"sortType"`
+	SC         int       `gorm:"column:SC" json:"SC"`
+	AddDate    time.Time `gorm:"column:addDate" json:"addDate"`
+	ModifyDate time.Time `gorm:"column:modifyDate" json:"modifyDate"`
+	IsDel      int       `gorm:"column:isDel" json:"isDel"`
 }

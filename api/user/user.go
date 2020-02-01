@@ -50,7 +50,7 @@ func GetLastSyncCount(c *gin.Context) {
 	if err != nil {
 		code = response.ERROR
 	} else {
-		data["lastSC"] = SC
+		data["SC"] = SC
 	}
 	response.JSON(c, code, response.GetMsg(code), data)
 }
