@@ -91,6 +91,7 @@ func Delete(c *gin.Context) {
 	local := note.Get(client.Guid)
 	if local.SC == client.SC {
 		newNote := model.Note{
+			Guid:       client.Guid,
 			Bid:        client.Bid,
 			Title:      client.Title,
 			Content:    client.Content,
@@ -126,6 +127,7 @@ func Update(c *gin.Context) {
 	local := note.Get(client.Guid)
 	if local.SC == client.SC {
 		newNote := model.Note{
+			Guid:       client.Guid,
 			Bid:        client.Bid,
 			Title:      client.Title,
 			Content:    client.Content,

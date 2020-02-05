@@ -93,6 +93,7 @@ func Delete(c *gin.Context) {
 	if local.SC == client.SC {
 		newNotebook := model.Notebook{
 			Uid:        c.GetInt("uid"),
+			Guid:       client.Guid,
 			Name:       client.Name,
 			Sort:       client.Sort,
 			SortType:   client.SortType,
@@ -108,7 +109,7 @@ func Delete(c *gin.Context) {
 			user.UpdateSC(uid, u.SC+1)
 			data = resultErr{false, false, u.SC + 1}
 		}
-	}  else {
+	} else {
 		data = resultErr{
 			IsRepeat: false,
 			IsErr:    true,
@@ -128,6 +129,7 @@ func Update(c *gin.Context) {
 	local := notebook.Get(client.Guid)
 	if local.SC == client.SC {
 		newNotebook := model.Notebook{
+			Guid:       client.Guid,
 			Uid:        c.GetInt("uid"),
 			Name:       client.Name,
 			Sort:       client.Sort,
