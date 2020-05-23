@@ -3,6 +3,7 @@
 
 out
 runtime
-markman-server
+bin
 
+markman-server
 app.json
