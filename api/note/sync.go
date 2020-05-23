@@ -1,7 +1,6 @@
 package note
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"markman-server/model"
 	"markman-server/service/note"
@@ -9,6 +8,8 @@ import (
 	"markman-server/tools/response"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Client struct {
@@ -137,12 +138,14 @@ func Update(c *gin.Context) {
 		}
 		err := note.Update(newNote)
 		if err != nil {
+			log.Println(err)
 			data = resultErr{false, true, u.SC + 1}
 		} else {
 			user.UpdateSC(uid, u.SC+1)
 			data = resultErr{false, false, u.SC + 1}
 		}
 	} else {
+		log.Println(local, client)
 		data = resultErr{
 			IsRepeat: false,
 			IsErr:    true,
