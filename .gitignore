@@ -4,6 +4,7 @@
 out
 runtime
 bin
+.build
 
 markman-server
 app.json
