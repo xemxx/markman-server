@@ -16,6 +16,6 @@
         "database": "markman"
     },
     "runtime": {
-     "log_url": "runtime/log/"
+        "log_url": "runtime/log/"
     }
 }
