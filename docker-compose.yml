@@ -2,15 +2,15 @@ version: '3'
 
 services:
   markman:
-    build: 
+    build:
         context: .
         dockerfile: docker/Dockerfile-autobuild
     ports:
       - "8000:8000"
-  
+
   markman-mysql:
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=1234
     ports:
-      - "3306:3306"
+      - "3336:3306"

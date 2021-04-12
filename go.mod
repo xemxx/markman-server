@@ -1,6 +1,6 @@
 module markman-server
 
-go 1.13
+go 1.16
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -22,11 +22,3 @@ require (
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/yaml.v2 v2.2.5 // indirect
 )
-
-// replace (
-// 	./tools/config => ./tools/config
-// 	github.com/xemxx/markman-server/config => ./config
-// 	github.com/xemxx/markman-server/middleware => ./middleware
-// 	github.com/xemxx/markman-server/models => ./models
-// 	github.com/xemxx/markman-server/routers => ./routers
-// )
