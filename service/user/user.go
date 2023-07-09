@@ -2,22 +2,21 @@ package user
 
 import (
 	"errors"
-	"markman-server/tools/logs"
+	"time"
+
+	"golang.org/x/exp/slog"
 
 	"markman-server/model"
 	"markman-server/tools/common"
-	"time"
 )
 
-var db = model.Db
-
-//ExistUser .
+// ExistUser .
 func ExistUser(username, password string) (int, bool) {
 	user := model.User{
 		Username: username,
 	}
-	db.Where(&user).First(&user)
-	if user.ID == 0 || db.Error != nil || !common.CheckPassword(user.Password, password) {
+	d := model.I().Where(&user).First(&user)
+	if user.ID == 0 || d.Error != nil || !common.CheckPassword(user.Password, password) {
 		return 0, false
 	}
 	return user.ID, true
@@ -26,8 +25,8 @@ func ExistUser(username, password string) (int, bool) {
 // ExistUserByName .
 func ExistUserByName(username string) bool {
 	var user = model.User{Username: username}
-	db.Where(&user).First(&user)
-	if user.ID == 0 || db.Error != nil {
+	d := model.I().Where(&user).First(&user)
+	if user.ID == 0 || d.Error != nil {
 		return false
 	}
 	return true
@@ -37,7 +36,7 @@ func ExistUserByName(username string) bool {
 func AddUser(username, password string) bool {
 	hash, err := common.NewPassword(password)
 	if err != nil {
-		logs.Log("generate password failed: err: " + err.Error())
+		slog.Info("generate password failed: err: %v", err)
 		return false
 	}
 	user := model.User{
@@ -46,20 +45,20 @@ func AddUser(username, password string) bool {
 		CreateTime: time.Now(),
 		SC:         0,
 	}
-	if rows := db.Create(&user).RowsAffected; rows == 0 {
-		logs.Log(db.Error.Error())
+	if rows := model.I().Create(&user).RowsAffected; rows == 0 {
+		slog.Info(model.I().Error.Error())
 		return false
 	}
 	return true
 }
 
 func UpdateSC(id, SC int) {
-	db.Table("user").Where("id=?", id).Update(map[string]interface{}{"SC": SC})
+	model.I().Table("user").Where("id=?", id).Update(map[string]interface{}{"SC": SC})
 }
 
 func Get(id int) model.User {
 	var user model.User
-	db.Where(`id=?`, id).First(&user)
+	model.I().Where(`id=?`, id).First(&user)
 	return user
 }
 
@@ -75,7 +74,7 @@ func Get(id int) model.User {
 
 // SaveToken .
 func SaveToken(uid int, token string) bool {
-	if rows := db.Model(&model.User{ID: uid}).Update("token", token).RowsAffected; rows == 0 {
+	if rows := model.I().Model(&model.User{ID: uid}).Update("token", token).RowsAffected; rows == 0 {
 		return false
 	}
 	return true

@@ -1,20 +1,21 @@
 package common
 
 import (
-	"markman-server/tools/config"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+
+	"markman-server/tools/config"
 )
 
-//Claims .
+// Claims .
 type Claims struct {
 	jwt.StandardClaims
 	Username string `json:"username"`
 	UID      int    `json:"id"`
 }
 
-//GenerateToken .
+// GenerateToken .
 func GenerateToken(username string, uid int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(60 * 24 * time.Hour)
@@ -36,7 +37,7 @@ func GenerateToken(username string, uid int) (string, error) {
 	return token, err
 }
 
-//ParseToken .
+// ParseToken .
 func ParseToken(token string) (*Claims, error) {
 	jwtSecret := []byte(config.Cfg.GetString("app.jwt_secret"))
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {

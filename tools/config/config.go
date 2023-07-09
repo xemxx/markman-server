@@ -2,20 +2,22 @@ package config
 
 import (
 	"fmt"
+
 	"github.com/spf13/viper"
 )
 
+// todo 转换为结构体加yaml
 type config struct {
 	*viper.Viper
 }
 
 var Cfg *config
 
-func init() {
+func Init() {
 	Cfg = &config{
 		viper.New(),
 	}
-	Cfg.SetConfigFile("app.json")
+	Cfg.SetConfigFile("app.yaml")
 	err := Cfg.ReadInConfig()
 
 	if err != nil {

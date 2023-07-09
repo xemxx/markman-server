@@ -8,7 +8,7 @@ type Note struct {
 	Uid        int       `json:"uid"`
 	Bid        string    `json:"bid"`
 	Title      string    `json:"title"`
-	Content    string    `json:"content"`
+	Content    string    `gorm:"type:LONGTEXT" json:"content"`
 	SC         int       `gorm:"column:SC" json:"SC"`
 	AddDate    time.Time `gorm:"column:addDate" json:"addDate"`
 	ModifyDate time.Time `gorm:"column:modifyDate" json:"modifyDate"`

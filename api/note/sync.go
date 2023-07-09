@@ -2,14 +2,15 @@ package note
 
 import (
 	"log"
-	"markman-server/model"
-	"markman-server/service/note"
-	"markman-server/service/user"
-	"markman-server/tools/response"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"markman-server/model"
+	"markman-server/service/note"
+	"markman-server/service/user"
+	"markman-server/tools/response"
 )
 
 type Client struct {
