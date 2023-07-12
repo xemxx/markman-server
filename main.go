@@ -1,17 +1,24 @@
 package main
 
 import (
+	"flag"
 	"log"
-	"markman-server/model"
-	"markman-server/router"
-	"markman-server/tools/config"
 	"net/http"
 
 	"golang.org/x/exp/slog"
+
+	"markman-server/model"
+	"markman-server/router"
+	"markman-server/tools/config"
+)
+
+var (
+	configFile = flag.String("c", "app.yaml", "config file path")
 )
 
 func main() {
-	config.Init()
+	flag.Parse()
+	config.Init(*configFile)
 	err := model.Init()
 	if err != nil {
 		log.Fatal(err)

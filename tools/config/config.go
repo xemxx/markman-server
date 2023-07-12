@@ -13,11 +13,11 @@ type config struct {
 
 var Cfg *config
 
-func Init() {
+func Init(configFile string) {
 	Cfg = &config{
 		viper.New(),
 	}
-	Cfg.SetConfigFile("app.yaml")
+	Cfg.SetConfigFile(configFile)
 	err := Cfg.ReadInConfig()
 
 	if err != nil {

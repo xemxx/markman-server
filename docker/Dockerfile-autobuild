@@ -1,4 +1,4 @@
-FROM golang:1.16
+FROM golang:1.20
 WORKDIR /go/src/markman-server
 COPY . .
 RUN go get -d -v ./...
@@ -11,4 +11,4 @@ WORKDIR /workspace
 COPY --from=0 /go/src/markman-server/markman-server markman
 COPY docker/app.json app.json
 
-ENTRYPOINT [ "/bin/bash","/workspace/markman" ]
+ENTRYPOINT [ "/workspace/markman" ]

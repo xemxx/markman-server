@@ -16,12 +16,11 @@ var Db *gorm.DB
 func Init() error {
 	dbCfg := config.Cfg.GetStringMapString("database")
 	var err error
-	Db, err = gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=%s",
+	Db, err = gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
 		dbCfg["user"],
 		dbCfg["password"],
 		dbCfg["host"],
-		dbCfg["database"],
-		"Asia%2FShanghai"))
+		dbCfg["database"]))
 	if err != nil {
 		return err
 	}
