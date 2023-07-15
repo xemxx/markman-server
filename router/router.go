@@ -1,12 +1,12 @@
 package router
 
 import (
-	"markman-server/api/note"
-	"markman-server/api/notebook"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
+	"markman-server/api/note"
+	"markman-server/api/notebook"
 	"markman-server/api/user"
 	"markman-server/middleware"
 	"markman-server/tools/config"

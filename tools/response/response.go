@@ -18,7 +18,7 @@ func JSON(c *gin.Context, code int, msg string, data ...interface{}) {
 		responseData = data[0]
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code":  code,
+		"code": code,
 		"msg":  msg,
 		"data": responseData,
 	})

@@ -2,14 +2,14 @@ package user
 
 import (
 	"fmt"
-	"markman-server/service/user"
-	"markman-server/tools/common"
-	"markman-server/tools/logs"
-	"markman-server/tools/response"
-
-	"github.com/go-playground/validator/v10"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"golang.org/x/exp/slog"
+
+	"markman-server/service/user"
+	"markman-server/tools/common"
+	"markman-server/tools/response"
 )
 
 // Sign .
@@ -52,9 +52,9 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	code := response.SUCCESS
+	var code int
 	data := make(map[string]interface{})
-	logs.Log(fmt.Sprintln(params))
+	slog.Info(fmt.Sprintln(params))
 	uid, isExist := user.ExistUser(params.Username, params.Password)
 	if !isExist {
 		code = response.ErrorUser
@@ -79,7 +79,7 @@ func SignIn(c *gin.Context) {
 func validateSign(c *gin.Context) (Sign, error) {
 	params := Sign{}
 	if err := c.ShouldBindJSON(&params); err != nil {
-		logs.Log(err.Error())
+		slog.Error(err.Error())
 		return Sign{}, err
 	}
 	if err := validate.Struct(params); err != nil {

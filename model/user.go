@@ -12,6 +12,7 @@ type User struct {
 	Token      string    `json:"token"`
 	SC         int       `gorm:"column:SC" json:"SC"`
 	CreateTime time.Time `json:"createTime"`
+	UID        string    `gorm:"unique" json:"uid"`
 }
 
 // GetByID .
