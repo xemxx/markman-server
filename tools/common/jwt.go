@@ -3,16 +3,16 @@ package common
 import (
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt/v5"
 
 	"markman-server/tools/config"
 )
 
 // Claims .
 type Claims struct {
-	jwt.StandardClaims
 	Username string `json:"username"`
 	UID      int    `json:"id"`
+	jwt.RegisteredClaims
 }
 
 // GenerateToken .
@@ -20,27 +20,25 @@ func GenerateToken(username string, uid int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(60 * 24 * time.Hour)
 
-	claims := Claims{
-		jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(),
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
+		Username: username,
+		UID:      uid,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expireTime),
 			Issuer:    "markman",
 		},
-		username,
-		uid,
-	}
-
-	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	})
 
 	jwtSecret := []byte(config.Cfg.GetString("app.jwt_secret"))
-	token, err := tokenClaims.SignedString(jwtSecret)
+	tokenString, err := token.SignedString(jwtSecret)
 
-	return token, err
+	return tokenString, err
 }
 
 // ParseToken .
-func ParseToken(token string) (*Claims, error) {
+func ParseToken(tokenString string) (*Claims, error) {
 	jwtSecret := []byte(config.Cfg.GetString("app.jwt_secret"))
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+	tokenClaims, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 

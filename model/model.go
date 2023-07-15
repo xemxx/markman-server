@@ -2,10 +2,9 @@ package model
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"markman-server/tools/config"
 )
@@ -16,26 +15,18 @@ var Db *gorm.DB
 func Init() error {
 	dbCfg := config.Cfg.GetStringMapString("database")
 	var err error
-	Db, err = gorm.Open(dbCfg["type"], fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
+	Db, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
 		dbCfg["user"],
 		dbCfg["password"],
 		dbCfg["host"],
-		dbCfg["database"]))
+		dbCfg["database"])), &gorm.Config{})
 	if err != nil {
 		return err
 	}
-	Db.SingularTable(true)
-	Db.LogMode(true)
-	Db.DB().SetMaxIdleConns(10)
-	Db.DB().SetMaxOpenConns(100)
-	Db.DB().SetConnMaxLifetime(time.Hour)
-	Db.AutoMigrate(&User{}).AutoMigrate(&Note{}).AutoMigrate(&Notebook{})
+	Db.AutoMigrate(&User{})
+	Db.AutoMigrate(&Note{})
+	Db.AutoMigrate(&Notebook{})
 	return nil
-}
-
-// CloseDB .
-func CloseDB() {
-	defer Db.Close()
 }
 
 func I() *gorm.DB {

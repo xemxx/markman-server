@@ -9,12 +9,13 @@ import (
 	"markman-server/tools/response"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/exp/slog"
 )
 
 type Auth struct {
 }
 
-//CheckToken ..
+// CheckToken ..
 func (c *Auth) CheckToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
@@ -33,8 +34,14 @@ func (c *Auth) CheckToken() gin.HandlerFunc {
 			if err != nil {
 				//logs.Log("token鉴权失败：",err)
 				code = response.ErrorAuthCheckTokenFail
-			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = response.ErrorAuthCheckTokenTimeout
+			} else {
+				t, err := claims.GetExpirationTime()
+				if err != nil {
+					slog.Error("can not parse exo time from token, err: %v", err)
+				}
+				if time.Now().Unix() > t.Unix() {
+					code = response.ErrorAuthCheckTokenTimeout
+				}
 			}
 		}
 

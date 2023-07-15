@@ -36,6 +36,6 @@ func Get(guid string) model.Note {
 }
 
 func Update(note model.Note) error {
-	d := model.I().Model(model.Note{}).Where("guid=?", note.Guid).Update(note)
+	d := model.I().Model(model.Note{}).Where("guid=?", note.Guid).Updates(note)
 	return d.Error
 }

@@ -53,7 +53,7 @@ func AddUser(username, password string) bool {
 }
 
 func UpdateSC(id, SC int) {
-	model.I().Table("user").Where("id=?", id).Update(map[string]interface{}{"SC": SC})
+	model.I().Table("user").Where("id=?", id).Updates(map[string]interface{}{"SC": SC})
 }
 
 func Get(id int) model.User {
