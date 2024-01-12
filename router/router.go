@@ -5,11 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"markman-server/api/note"
-	"markman-server/api/notebook"
-	"markman-server/api/user"
+	"markman-server/api/v1/note"
+	"markman-server/api/v1/notebook"
+	"markman-server/api/v1/user"
 	"markman-server/middleware"
 	"markman-server/tools/config"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // InitRouter .
@@ -22,8 +25,8 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
-	mCors := middleware.Cors{}
-	r.Use(mCors.CorsMiddleware())
+	r.Use(middleware.CorsMiddleware())
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -35,17 +38,15 @@ func InitRouter() *gin.Engine {
 
 	// user
 	ur := r.Group("/user")
-	mAuth := middleware.Auth{}
-	ur.Use(mAuth.CheckToken())
+	ur.Use(middleware.CheckToken())
 	{
-		//ur.POST("/info", user.Info)
 		ur.POST("/flashToken", user.FlashToken)
 		ur.GET("/getLastSyncCount", user.GetLastSyncCount)
 	}
 
 	// notebook
 	nbr := r.Group("/notebook")
-	nbr.Use(mAuth.CheckToken())
+	nbr.Use(middleware.CheckToken())
 	{
 		nbr.GET("/getSync", notebook.GetSync)
 		nbr.POST("/create", notebook.Create)
@@ -56,7 +57,7 @@ func InitRouter() *gin.Engine {
 
 	// note
 	nr := r.Group("/note")
-	nr.Use(mAuth.CheckToken())
+	nr.Use(middleware.CheckToken())
 	{
 		nr.GET("/getSync", note.GetSync)
 		nr.POST("/create", note.Create)

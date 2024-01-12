@@ -1,0 +1,88 @@
+basePath: /
+definitions:
+  model.Note:
+    properties:
+      SC:
+        type: integer
+      addDate:
+        type: string
+      bid:
+        type: string
+      content:
+        type: string
+      guid:
+        type: string
+      id:
+        type: integer
+      isDel:
+        type: integer
+      modifyDate:
+        type: string
+      title:
+        type: string
+      uid:
+        type: integer
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: xemxx@qq.com
+    name: xem
+    url: https://xemxx.cn
+  description: This is a markman server.
+  termsOfService: http://swagger.io/terms/
+  title: Markman API
+  version: "1.0"
+paths:
+  /note/getSync:
+    get:
+      consumes:
+      - application/json
+      description: Node Sync
+      parameters:
+      - description: JWT
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 同步版本号
+        in: query
+        name: afterSC
+        type: string
+      - description: 最大个数
+        in: query
+        name: maxCount
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: desc
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Note'
+                  type: array
+              type: object
+        "400":
+          description: desc
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: GetSync Note
+      tags:
+      - note
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
