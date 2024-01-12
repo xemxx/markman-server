@@ -12,11 +12,9 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-type Auth struct {
-}
 
 // CheckToken ..
-func (c *Auth) CheckToken() gin.HandlerFunc {
+func CheckToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
 		var data interface{}

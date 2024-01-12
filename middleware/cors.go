@@ -6,11 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Cors struct {
-}
-
 // CorsMiddleware 用于跨域请求
-func (c *Cors) CorsMiddleware() gin.HandlerFunc {
+func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		//origin := c.Request.Header.Get("Origin")

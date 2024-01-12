@@ -6,6 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Response struct {
+	Code    int         `json:"code" `
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
 // JSON .
 // 标准返回结果数据结构封装。
 // 返回固定数据结构的JSON:

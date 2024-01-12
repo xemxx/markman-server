@@ -7,6 +7,7 @@ import (
 
 	"golang.org/x/exp/slog"
 
+	_ "markman-server/docs"
 	"markman-server/model"
 	"markman-server/router"
 	"markman-server/tools/config"
@@ -16,6 +17,19 @@ var (
 	configFile = flag.String("c", "app.yaml", "config file path")
 )
 
+//	@title			Markman API
+//	@version		1.0
+//	@description	This is a markman server.
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	xem
+//	@contact.url	https://xemxx.cn
+//	@contact.email	xemxx@qq.com
+
+//	@host		localhost:8080
+//	@BasePath	/
+
+//	@securityDefinitions.basic	BasicAuth
 func main() {
 	flag.Parse()
 	config.Init(*configFile)
