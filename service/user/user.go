@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"golang.org/x/exp/slog"
@@ -15,8 +16,13 @@ func ExistUser(username, password string) (int, bool) {
 	user := model.User{
 		Username: username,
 	}
-	d := model.I().Where(&user).First(&user)
-	if user.ID == 0 || d.Error != nil || !common.CheckPassword(user.Password, password) {
+	d := model.I().Where(&user, "username").First(&user)
+	fmt.Println(user)
+	if user.ID == 0 || d.Error != nil {
+		fmt.Println(d.Error.Error())
+		return 0, false
+	}
+	if !common.CheckPassword(user.Password, password) {
 		return 0, false
 	}
 	return user.ID, true

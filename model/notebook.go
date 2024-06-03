@@ -14,3 +14,7 @@ type Notebook struct {
 	ModifyDate time.Time `gorm:"column:modifyDate" json:"modifyDate"`
 	IsDel      int       `gorm:"column:isDel" json:"isDel"`
 }
+
+func (u *Notebook) TableName() string {
+	return "notebook"
+}

@@ -1,8 +1,6 @@
 package model
 
-import (
-	"time"
-)
+import "time"
 
 // User .
 type User struct {
@@ -18,4 +16,8 @@ type User struct {
 // GetByID .
 func (u *User) GetByID() {
 	Db.Where(u).First(u)
+}
+
+func (u *User) TableName() string {
+	return "user"
 }
