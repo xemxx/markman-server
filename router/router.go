@@ -19,7 +19,7 @@ import (
 func InitRouter() *gin.Engine {
 	cfg := config.Cfg
 	//不存在时也为debug模式
-	gin.SetMode(cfg.GetString("app.run_mode"))
+	gin.SetMode(cfg.App.RunMode)
 	r := gin.New()
 
 	r.Use(gin.Logger())

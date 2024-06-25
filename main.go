@@ -29,7 +29,7 @@ var (
 //	@host		localhost:8080
 //	@BasePath	/
 
-//	@securityDefinitions.basic	BasicAuth
+// @securityDefinitions.basic	BasicAuth
 func main() {
 	flag.Parse()
 	config.Init(*configFile)
@@ -41,10 +41,10 @@ func main() {
 	cfg := config.Cfg
 
 	s := &http.Server{
-		Addr:           ":" + cfg.GetString("server.http_port"),
+		Addr:           ":" + cfg.Server.HttpPort,
 		Handler:        r,
-		ReadTimeout:    cfg.GetDuration("server.read_timeout"),
-		WriteTimeout:   cfg.GetDuration("server.write_timeout"),
+		ReadTimeout:    cfg.Server.ReadTimeout,
+		WriteTimeout:   cfg.Server.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 

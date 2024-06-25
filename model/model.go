@@ -13,13 +13,13 @@ import (
 var Db *gorm.DB
 
 func Init() error {
-	dbCfg := config.Cfg.GetStringMapString("database")
+	dbCfg := config.Cfg.Database
 	var err error
 	Db, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
-		dbCfg["user"],
-		dbCfg["password"],
-		dbCfg["host"],
-		dbCfg["database"])), &gorm.Config{})
+		dbCfg.User,
+		dbCfg.Type,
+		dbCfg.Host,
+		dbCfg.Database)), &gorm.Config{})
 	if err != nil {
 		return err
 	}
