@@ -23,8 +23,8 @@ jobs:
         run: go get .
       - name: Build
         run: go build -o markman-server .
-      - name: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: server
-          path: markman-server
+      # - name: upload
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: server
+      #     path: markman-server
