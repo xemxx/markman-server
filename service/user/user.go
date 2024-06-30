@@ -3,8 +3,8 @@ package user
 import (
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/exp/slog"
 
 	"markman-server/model"
@@ -39,23 +39,40 @@ func ExistUserByName(username string) bool {
 }
 
 // AddUser .
-func AddUser(username, password string) bool {
+func AddUser(username, password string) (string, bool) {
 	hash, err := common.NewPassword(password)
 	if err != nil {
-		slog.Info("generate password failed: err: %v", err)
-		return false
+		slog.Info("generate password failed", "err", err)
+		return "", false
 	}
 	user := model.User{
-		Username:   username,
-		Password:   hash,
-		CreateTime: time.Now(),
-		SC:         0,
+		Username: username,
+		Password: hash,
+		SC:       0,
+		UUID:     uuid.New().String(),
 	}
 	if rows := model.I().Create(&user).RowsAffected; rows == 0 {
-		slog.Info(model.I().Error.Error())
-		return false
+		slog.Info("create user failed", "err", model.I().Error.Error())
+		return "", false
 	}
-	return true
+	return user.UUID, true
+}
+
+// GetByPass .
+func GetByPass(username, password string) (*model.User, bool) {
+	user := model.User{
+		Username: username,
+	}
+	d := model.I().Where(&user, "username").First(&user)
+	fmt.Println(user)
+	if user.ID == 0 || d.Error != nil {
+		fmt.Println(d.Error.Error())
+		return &user, false
+	}
+	if !common.CheckPassword(user.Password, password) {
+		return &user, false
+	}
+	return &user, true
 }
 
 func UpdateSC(id, SC int) {
@@ -67,16 +84,6 @@ func Get(id int) model.User {
 	model.I().Where(`id=?`, id).First(&user)
 	return user
 }
-
-//// GetUserInfo .
-//func GetUserInfo(uid int) (model.User, error) {
-//	var user = model.User{ID: uid}
-//	user.GetByID()
-//	if user.Username != "" {
-//		return user, nil
-//	}
-//	return model.User{}, errors.New("user not find")
-//}
 
 // SaveToken .
 func SaveToken(uid int, token string) bool {

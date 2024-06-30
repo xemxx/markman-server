@@ -12,7 +12,6 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-
 // CheckToken ..
 func CheckToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -35,7 +34,7 @@ func CheckToken() gin.HandlerFunc {
 			} else {
 				t, err := claims.GetExpirationTime()
 				if err != nil {
-					slog.Error("can not parse exo time from token, err: %v", err)
+					slog.Error("can not parse exo time from token, ", "err", err)
 				}
 				if time.Now().Unix() > t.Unix() {
 					code = response.ErrorAuthCheckTokenTimeout

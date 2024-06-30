@@ -17,9 +17,11 @@ func Init() error {
 	var err error
 	Db, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
 		dbCfg.User,
-		dbCfg.Type,
+		dbCfg.Password,
 		dbCfg.Host,
-		dbCfg.Database)), &gorm.Config{})
+		dbCfg.Database)), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	if err != nil {
 		return err
 	}

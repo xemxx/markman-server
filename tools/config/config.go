@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// todo 转换为结构体加yaml
 type Config struct {
 	App struct {
 		JwtSecret string `mapstructure:"jwt_secret"`
