@@ -5,8 +5,8 @@ import "time"
 // User .
 type User struct {
 	ID        int    `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-	UUID      string `gorm:"uniqueIndex;not null;size:255" json:"uuid"`
-	Username  string `gorm:"uniqueIndex;not null" json:"username"`
+	Username  string `gorm:"uniqueIndex;not null;size:255" json:"username"`
+	UUID      string `gorm:"not null;size:255" json:"uuid"`
 	Password  string `gorm:"not null" json:"password"`
 	Token     string `gorm:"size:255" json:"token"`
 	SC        int    `gorm:"column:SC" json:"SC"`

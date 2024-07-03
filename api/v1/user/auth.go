@@ -42,7 +42,9 @@ func SignUp(c *gin.Context) {
 		response.JSON(c, response.ErrorInsertFailed, response.GetMsg(response.ErrorInsertFailed))
 		return
 	}
-	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS), uid)
+	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS), map[string]interface{}{
+		"uuid": uid,
+	})
 }
 
 // SignIn 登录流程，生成新token并供使用
