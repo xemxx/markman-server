@@ -33,6 +33,7 @@ var Cfg *Config
 
 func Init(configFile string) {
 	c := viper.New()
+	c.SetConfigType("yaml")
 	c.SetConfigFile(configFile)
 	err := c.ReadInConfig()
 	if err != nil {

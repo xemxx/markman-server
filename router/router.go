@@ -38,7 +38,7 @@ func InitRouter() *gin.Engine {
 
 	// user
 	ur := r.Group("/user")
-	ur.Use(middleware.CheckToken())
+	ur.Use(middleware.Auth())
 	{
 		ur.POST("/flashToken", user.FlashToken)
 		ur.GET("/getLastSyncCount", user.GetLastSyncCount)
@@ -46,18 +46,17 @@ func InitRouter() *gin.Engine {
 
 	// notebook
 	nbr := r.Group("/notebook")
-	nbr.Use(middleware.CheckToken())
+	nbr.Use(middleware.Auth())
 	{
 		nbr.GET("/getSync", notebook.GetSync)
 		nbr.POST("/create", notebook.Create)
 		nbr.POST("/delete", notebook.Delete)
 		nbr.POST("/update", notebook.Update)
-
 	}
 
 	// note
 	nr := r.Group("/note")
-	nr.Use(middleware.CheckToken())
+	nr.Use(middleware.Auth())
 	{
 		nr.GET("/getSync", note.GetSync)
 		nr.POST("/create", note.Create)

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/google/uuid"
+	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang.org/x/exp/slog"
 
 	"markman-server/model"
@@ -42,14 +42,19 @@ func ExistUserByName(username string) bool {
 func AddUser(username, password string) (string, bool) {
 	hash, err := common.NewPassword(password)
 	if err != nil {
-		slog.Info("generate password failed", "err", err)
+		slog.Error("BUG: generate password failed", "err", err)
+		return "", false
+	}
+	id, err := gonanoid.New()
+	if err != nil {
+		slog.Error("BUG: generate uuid failed", "err", err)
 		return "", false
 	}
 	user := model.User{
 		Username: username,
 		Password: hash,
 		SC:       0,
-		UUID:     uuid.New().String(),
+		UUID:     id,
 	}
 	if rows := model.I().Create(&user).RowsAffected; rows == 0 {
 		slog.Info("create user failed", "err", model.I().Error.Error())

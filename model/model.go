@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/google/uuid"
+	gonanoid "github.com/matoous/go-nanoid/v2"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
@@ -18,14 +18,16 @@ var Db *gorm.DB
 func Init() error {
 	dbCfg := config.Cfg.Database
 	var err error
-	Db, err = gorm.Open(mysql.Open(fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True",
 		dbCfg.User,
 		dbCfg.Password,
 		dbCfg.Host,
-		dbCfg.Database)), &gorm.Config{
+		dbCfg.Database)
+	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 	if err != nil {
+		slog.Error("connect database failed", "err", err, "dsn", dsn)
 		return err
 	}
 	if Db.Migrator().HasColumn(&User{}, "uid") {
@@ -48,7 +50,12 @@ func Init() error {
 	tx.Select("*").Find(&users)
 	for _, user := range users {
 		if user.UUID == "" {
-			user.UUID = uuid.New().String()
+			id, err := gonanoid.New()
+			if err != nil {
+				slog.Error("BUG: generate uuid failed", "err", err)
+				return err
+			}
+			user.UUID = id
 			if user.CreatedAt.IsZero() {
 				user.CreatedAt = time.Now()
 			}
