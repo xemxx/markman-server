@@ -7,6 +7,7 @@ import (
 
 	"golang.org/x/exp/slog"
 
+	_ "markman-server/docs"
 	"markman-server/model"
 	"markman-server/router"
 	"markman-server/tools/config"
@@ -16,6 +17,19 @@ var (
 	configFile = flag.String("c", "app.yaml", "config file path")
 )
 
+//	@title			Markman API
+//	@version		1.0
+//	@description	This is a markman server.
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	xem
+//	@contact.url	https://xemxx.cn
+//	@contact.email	xemxx@qq.com
+
+//	@host		localhost:8080
+//	@BasePath	/
+
+// @securityDefinitions.basic	BasicAuth
 func main() {
 	flag.Parse()
 	config.Init(*configFile)
@@ -27,10 +41,10 @@ func main() {
 	cfg := config.Cfg
 
 	s := &http.Server{
-		Addr:           ":" + cfg.GetString("server.http_port"),
+		Addr:           ":" + cfg.Server.HttpPort,
 		Handler:        r,
-		ReadTimeout:    cfg.GetDuration("server.read_timeout"),
-		WriteTimeout:   cfg.GetDuration("server.write_timeout"),
+		ReadTimeout:    cfg.Server.ReadTimeout,
+		WriteTimeout:   cfg.Server.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 

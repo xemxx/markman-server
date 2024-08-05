@@ -37,11 +37,14 @@ func SignUp(c *gin.Context) {
 		response.JSON(c, response.ErrorExistUserName, response.GetMsg(response.ErrorExistUserName))
 		return
 	}
-	if !user.AddUser(params.Username, params.Password) {
+	uid, ok := user.AddUser(params.Username, params.Password)
+	if !ok {
 		response.JSON(c, response.ErrorInsertFailed, response.GetMsg(response.ErrorInsertFailed))
 		return
 	}
-	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS))
+	response.JSON(c, response.SUCCESS, response.GetMsg(response.SUCCESS), map[string]interface{}{
+		"uuid": uid,
+	})
 }
 
 // SignIn 登录流程，生成新token并供使用
@@ -55,22 +58,23 @@ func SignIn(c *gin.Context) {
 	var code int
 	data := make(map[string]interface{})
 	slog.Info(fmt.Sprintln(params))
-	uid, isExist := user.ExistUser(params.Username, params.Password)
+	info, isExist := user.GetByPass(params.Username, params.Password)
 	if !isExist {
 		code = response.ErrorUser
 		response.JSON(c, code, response.GetMsg(code), data)
 		return
 	}
 
-	token, err := common.GenerateToken(params.Username, uid)
+	token, err := common.GenerateToken(params.Username, info.ID)
 	if err != nil {
 		code = response.ERROR
 		response.JSON(c, code, response.GetMsg(code), data)
 		return
 	}
 
-	_ = user.SaveToken(uid, token)
+	_ = user.SaveToken(info.ID, token)
 	data["token"] = token
+	data["uuid"] = info.UUID
 	code = response.SUCCESS
 	response.JSON(c, code, response.GetMsg(code), data)
 }

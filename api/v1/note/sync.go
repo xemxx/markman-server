@@ -26,6 +26,18 @@ type Client struct {
 	ModifyDate  int64  `json:"modifyDate"`
 }
 
+//	@Summary	GetSync Note
+//	@Schemes
+//	@Description	Node Sync
+//	@Tags			note
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string									true	"JWT"
+//	@Param			afterSC			query		string									0	"同步版本号"
+//	@Param			maxCount		query		integer									10	"最大个数"
+//	@Success		200				{object}	response.Response{data=[]model.Note}	"desc"
+//	@Failure		400				{object}	response.Response						"desc"
+//	@Router			/note/getSync [get]
 func GetSync(c *gin.Context) {
 	afterSC, _ := strconv.Atoi(c.DefaultQuery("afterSC", "0"))
 	maxCount, _ := strconv.Atoi(c.DefaultQuery("maxCount", "10"))

@@ -4,13 +4,14 @@ import "time"
 
 // User .
 type User struct {
-	ID         int       `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
-	Username   string    `gorm:"unique;not null" json:"username"`
-	Password   string    `json:"password"`
-	Token      string    `json:"token"`
-	SC         int       `gorm:"column:SC" json:"SC"`
-	CreateTime time.Time `json:"createTime"`
-	UID        string    `gorm:"unique" json:"uid"`
+	ID        int    `gorm:"primary_key;AUTO_INCREMENT" json:"id"`
+	Username  string `gorm:"uniqueIndex;not null;size:255" json:"username"`
+	UUID      string `gorm:"not null;size:255" json:"uuid"`
+	Password  string `gorm:"not null" json:"password"`
+	Token     string `gorm:"size:255" json:"token"`
+	SC        int    `gorm:"column:SC" json:"SC"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 // GetByID .

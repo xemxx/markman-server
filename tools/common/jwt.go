@@ -29,7 +29,7 @@ func GenerateToken(username string, uid int) (string, error) {
 		},
 	})
 
-	jwtSecret := []byte(config.Cfg.GetString("app.jwt_secret"))
+	jwtSecret := []byte(config.Cfg.App.JwtSecret)
 	tokenString, err := token.SignedString(jwtSecret)
 
 	return tokenString, err
@@ -37,7 +37,7 @@ func GenerateToken(username string, uid int) (string, error) {
 
 // ParseToken .
 func ParseToken(tokenString string) (*Claims, error) {
-	jwtSecret := []byte(config.Cfg.GetString("app.jwt_secret"))
+	jwtSecret := []byte(config.Cfg.App.JwtSecret)
 	tokenClaims, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
