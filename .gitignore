@@ -8,3 +8,5 @@ bin
 
 markman-server
 *.local
+
+app.yaml

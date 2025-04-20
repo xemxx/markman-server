@@ -4,15 +4,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"markman-server/api/v1/node"
 	"markman-server/api/v1/note"
 	"markman-server/api/v1/notebook"
 	"markman-server/api/v1/user"
 	"markman-server/middleware"
 	"markman-server/tools/config"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // InitRouter .
@@ -62,6 +62,16 @@ func InitRouter() *gin.Engine {
 		nr.POST("/create", note.Create)
 		nr.POST("/delete", note.Delete)
 		nr.POST("/update", note.Update)
+	}
+
+	// node (统一的节点API)
+	noder := r.Group("/node")
+	noder.Use(middleware.Auth())
+	{
+		noder.GET("/getSync", node.GetSync)
+		noder.POST("/create", node.Create)
+		noder.POST("/delete", node.Delete)
+		noder.POST("/update", node.Update)
 	}
 
 	return r
