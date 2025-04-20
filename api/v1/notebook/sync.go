@@ -90,7 +90,7 @@ func Delete(c *gin.Context) {
 	u := user.Get(uid)
 
 	code, data := response.SUCCESS, resultErr{}
-
+	//TODO 还需要判断是否已经被删除，可能用户在不同的客户端删除两次，只需要删除并返回成功即可
 	local := notebook.Get(client.Guid)
 	if local.SC == client.SC {
 		newNotebook := model.Notebook{

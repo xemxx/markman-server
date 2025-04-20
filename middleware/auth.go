@@ -12,8 +12,8 @@ import (
 	"golang.org/x/exp/slog"
 )
 
-// CheckToken ..
-func CheckToken() gin.HandlerFunc {
+// Auth ..
+func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
 		var data interface{}

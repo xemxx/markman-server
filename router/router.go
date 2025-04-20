@@ -4,15 +4,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"markman-server/api/v1/node"
 	"markman-server/api/v1/note"
 	"markman-server/api/v1/notebook"
 	"markman-server/api/v1/user"
 	"markman-server/middleware"
 	"markman-server/tools/config"
-
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // InitRouter .
@@ -38,7 +38,7 @@ func InitRouter() *gin.Engine {
 
 	// user
 	ur := r.Group("/user")
-	ur.Use(middleware.CheckToken())
+	ur.Use(middleware.Auth())
 	{
 		ur.POST("/flashToken", user.FlashToken)
 		ur.GET("/getLastSyncCount", user.GetLastSyncCount)
@@ -46,23 +46,32 @@ func InitRouter() *gin.Engine {
 
 	// notebook
 	nbr := r.Group("/notebook")
-	nbr.Use(middleware.CheckToken())
+	nbr.Use(middleware.Auth())
 	{
 		nbr.GET("/getSync", notebook.GetSync)
 		nbr.POST("/create", notebook.Create)
 		nbr.POST("/delete", notebook.Delete)
 		nbr.POST("/update", notebook.Update)
-
 	}
 
 	// note
 	nr := r.Group("/note")
-	nr.Use(middleware.CheckToken())
+	nr.Use(middleware.Auth())
 	{
 		nr.GET("/getSync", note.GetSync)
 		nr.POST("/create", note.Create)
 		nr.POST("/delete", note.Delete)
 		nr.POST("/update", note.Update)
+	}
+
+	// node (统一的节点API)
+	noder := r.Group("/node")
+	noder.Use(middleware.Auth())
+	{
+		noder.GET("/getSync", node.GetSync)
+		noder.POST("/create", node.Create)
+		noder.POST("/delete", node.Delete)
+		noder.POST("/update", node.Update)
 	}
 
 	return r

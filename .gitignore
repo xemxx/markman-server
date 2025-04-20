@@ -7,4 +7,6 @@ bin
 .build
 
 markman-server
+*.local
+
 app.yaml
