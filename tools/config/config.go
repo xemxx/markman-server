@@ -9,8 +9,10 @@ import (
 
 type Config struct {
 	App struct {
-		JwtSecret string `mapstructure:"jwt_secret"`
-		RunMode   string `mapstructure:"run_mode"`
+		JwtSecret        string `mapstructure:"jwt_secret"`
+		RunMode          string `mapstructure:"run_mode"`
+		Version          string `mapstructure:"version"`
+		MinClientVersion string `mapstructure:"min_client_version"`
 	} `mapstructure:"app"`
 	Server struct {
 		HttpPort     string        `mapstructure:"http_port"`

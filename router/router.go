@@ -11,6 +11,7 @@ import (
 	"markman-server/api/v1/note"
 	"markman-server/api/v1/notebook"
 	"markman-server/api/v1/user"
+	"markman-server/api/v1/version"
 	"markman-server/middleware"
 	"markman-server/tools/config"
 )
@@ -33,6 +34,7 @@ func InitRouter() *gin.Engine {
 			"message": "pong",
 		})
 	})
+	r.GET("/version", version.GetVersion)
 	r.POST("/signIn", user.SignIn)
 	r.POST("/signUp", user.SignUp)
 
