@@ -134,7 +134,6 @@ func Create(c *gin.Context) {
 			data = resultErr{false, false, u.SC + 1}
 		}
 	} else {
-
 		data = resultErr{true, false, u.SC}
 	}
 	response.JSON(c, code, response.GetMsg(code), data)
