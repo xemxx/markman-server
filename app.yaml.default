@@ -2,7 +2,7 @@ app:
   jwt_secret: "123"
   run_mode: debug
   version: "0.3.0"
-  min_client_version: "0.3.1"
+  min_client_version: "0.4.0"
 server:
   http_port: 8000
   read_timeout: 60s
