@@ -2,8 +2,6 @@ module markman-server
 
 go 1.23.0
 
-toolchain go1.24.2
-
 require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.26.0

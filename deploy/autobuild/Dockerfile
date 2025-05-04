@@ -1,5 +1,5 @@
 # 使用最新版本的 golang 官方镜像作为构建阶段的基础镜像
-FROM golang:1.22-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 COPY . .
